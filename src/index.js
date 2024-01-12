@@ -12,7 +12,9 @@ import {
     getDolarCclPrice,
     getDolarMepPrice,
     getDolarCriptoPrice,
+    getAcciones,
 } from "./controllers/messages.js";
+import logger from "./config/winstonLogger.js";
 
 const expressApp = express();
 expressApp.use(express.static("static"));
@@ -24,6 +26,8 @@ expressApp.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "src/index.html"));
 });
 
+logger.info("Starting bot");
+
 bot.command("oficial", getDolarOficialPrice);
 bot.command("ada", getAdaPrice);
 bot.command("andate", removeBot);
@@ -34,5 +38,6 @@ bot.command("futuro", getDolarFuturoPrice);
 bot.command("ccl", getDolarCclPrice);
 bot.command("mep", getDolarMepPrice);
 bot.command("cripto", getDolarCriptoPrice);
+bot.command("acciones", getAcciones);
 
 bot.launch();

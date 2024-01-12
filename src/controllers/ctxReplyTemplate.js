@@ -13,8 +13,6 @@ export const GenerateTemplate = async (ctx, api, title) => {
     if (variacionFloat > 5) {
         handleStatus = "C picó papá! 🔥";
     }
-
-    console.log(precio);
     ctx.reply(
         `*${title}*
         ${handleStatus}
