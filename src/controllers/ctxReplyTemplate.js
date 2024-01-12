@@ -24,3 +24,7 @@ export const GenerateTemplate = async (ctx, api, title) => {
         { parse_mode: "Markdown", reply_to_message_id: ctx.message.message_id }
     );
 };
+
+export const formatNumber = (number) => {
+    return parseInt(number).toLocaleString("ES-ar");
+};

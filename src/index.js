@@ -13,6 +13,7 @@ import {
     getDolarMepPrice,
     getDolarCriptoPrice,
     getAcciones,
+    getGranos,
 } from "./controllers/messages.js";
 import logger from "./config/winstonLogger.js";
 
@@ -39,5 +40,6 @@ bot.command("ccl", getDolarCclPrice);
 bot.command("mep", getDolarMepPrice);
 bot.command("cripto", getDolarCriptoPrice);
 bot.command("acciones", getAcciones);
+bot.command("granos", getGranos);
 
 bot.launch();

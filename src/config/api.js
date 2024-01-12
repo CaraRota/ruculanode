@@ -11,3 +11,4 @@ export const cripto = process.env.API_CRIPTO;
 export const mep = process.env.API_MEP;
 export const cryptoPrices = process.env.API_CRYPTO_PRICES;
 export const acciones = process.env.API_ACCIONES;
+export const granos = process.env.API_GRANOS;

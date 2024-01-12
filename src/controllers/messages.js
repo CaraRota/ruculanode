@@ -10,8 +10,9 @@ import {
     mep,
     cryptoPrices,
     acciones,
+    granos,
 } from "../config/api.js";
-import { GenerateTemplate } from "./ctxReplyTemplate.js";
+import { GenerateTemplate, formatNumber } from "./ctxReplyTemplate.js";
 import logger from "../config/winstonLogger.js";
 
 export const getAdaPrice = async (ctx) => {
@@ -84,6 +85,36 @@ export const getAcciones = async (ctx) => {
     }
 };
 
+export const getGranos = async (ctx) => {
+    logger.info(`${ctx.from.username} asked for the grain market`);
+    try {
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; // Ignore certificate errors just for this request
+        const response = await axios.get(granos);
+        const grano = response.data.pizarra[0];
+
+        const { fecha, soja, sorgo, girasol, trigo, maiz } = grano;
+
+        ctx.reply(
+            `*🚛 PIZARRA ROSARIO*
+
+📅 *Fecha:* ${fecha}
+🌱 *Soja:* ${soja.rosario === "0.00" ? "S/C" : "$" + formatNumber(soja.rosario)}
+🌾 *Sorgo:* ${sorgo.rosario === "0.00" ? "S/C" : "$" + formatNumber(sorgo.rosario)}
+🌻 *Girasol:* ${girasol.rosario === "0.00" ? "S/C" : "$" + formatNumber(girasol.rosario)}
+🌾 *Trigo:* ${trigo.rosario === "0.00" ? "S/C" : "$" + formatNumber(trigo.rosario)}
+🌽 *Maiz:* ${maiz.rosario === "0.00" ? "S/C" : "$" + formatNumber(maiz.rosario)}
+`,
+            {
+                parse_mode: "Markdown",
+                reply_to_message_id: ctx.message.message_id,
+            }
+        );
+    } catch (error) {
+        ctx.reply(`Error: ${error}`);
+        logger.error(error);
+    }
+};
+
 //LISTA PRECIO DE DOLARES
 
 export const getDolarOficialPrice = async (ctx) => {
@@ -113,7 +144,7 @@ export const getDolarFuturoPrice = async (ctx) => {
 
 export const getDolarCclPrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the ccl dollar price`);
-    GenerateTemplate(ctx, ccl, "🌐 PRECIO DOLAR CCL");
+    GenerateTemplate(ctx, ccl, "🌎 PRECIO DOLAR CCL");
 };
 
 export const getDolarMepPrice = async (ctx) => {
@@ -123,5 +154,5 @@ export const getDolarMepPrice = async (ctx) => {
 
 export const getDolarCriptoPrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the cripto dollar price`);
-    GenerateTemplate(ctx, cripto, "🤖 PRECIO DOLAR CRIPTO");
+    GenerateTemplate(ctx, cripto, "🪙 PRECIO DOLAR CRIPTO");
 };
