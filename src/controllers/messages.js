@@ -12,9 +12,10 @@ import {
     acciones,
     granos,
 } from "../config/api.js";
-import { GenerateTemplate, formatNumber } from "./ctxReplyTemplate.js";
+import { GenerateTemplate, formatNumber, fetchDolarData } from "./ctxReplyTemplate.js";
 import logger from "../config/winstonLogger.js";
 
+//THIS IS AN EASTER EGG
 export const getAdaPrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the ADA price`);
     try {
@@ -34,6 +35,38 @@ export const getAdaPrice = async (ctx) => {
     } catch (error) {
         ctx.reply(`Error: ${error}`);
         logger.error(error);
+    }
+};
+
+export const generalData = async (ctx) => {
+    logger.info(`${ctx.from.username} asked for the general data`);
+    try {
+        const dolarOficial = await fetchDolarData(oficial);
+        const dolarBlue = await fetchDolarData(blue);
+        const dolarTurista = await fetchDolarData(turista);
+        const dolarMayorista = await fetchDolarData(mayorista);
+        const dolarFuturo = await fetchDolarData(futuro);
+        const dolarCCL = await fetchDolarData(ccl);
+        const dolarMep = await fetchDolarData(mep);
+        const dolarCripto = await fetchDolarData(cripto);
+
+        ctx.reply(
+            `*💼 COTIZACIONES GENERALES*
+
+*🏦 Dolar Oficial:* ${dolarOficial}
+*💸 Dolar Blue:* ${dolarBlue}
+*🏖 Dolar Turista:* ${dolarTurista}
+*🏭 Dolar Mayorista:* ${dolarMayorista}
+*🔮 Dolar Futuro:* ${dolarFuturo}
+*🌎 Dolar CCL:* ${dolarCCL}
+*💵 Dolar MEP:* ${dolarMep}
+*🪙 Dolar Cripto:* ${dolarCripto}
+`,
+            { parse_mode: "Markdown", reply_to_message_id: ctx.message.message_id }
+        );
+    } catch (error) {
+        logger.error(error);
+        ctx.reply(`Error: ${error}`);
     }
 };
 

@@ -1,7 +1,7 @@
 {
     "name": "ruculanode",
     "description": "A telegram bot made with node that serves argetine peso price + crypto ",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "type": "module",
     "main": "src/index.js",
     "scripts": {

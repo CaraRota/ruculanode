@@ -14,6 +14,7 @@ import {
     getDolarCriptoPrice,
     getAcciones,
     getGranos,
+    generalData,
 } from "./controllers/messages.js";
 import logger from "./config/winstonLogger.js";
 
@@ -29,6 +30,7 @@ expressApp.get("/", (req, res) => {
 
 logger.info("Starting bot");
 
+bot.command("general", generalData);
 bot.command("oficial", getDolarOficialPrice);
 bot.command("ada", getAdaPrice);
 bot.command("andate", removeBot);

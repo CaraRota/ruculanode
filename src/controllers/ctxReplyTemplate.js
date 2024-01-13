@@ -28,3 +28,9 @@ export const GenerateTemplate = async (ctx, api, title) => {
 export const formatNumber = (number) => {
     return parseInt(number).toLocaleString("ES-ar");
 };
+
+//DATA FETCHER FOR GENERAL COMMAND
+export const fetchDolarData = async (url) => {
+    const response = await axios.get(url);
+    return response.data.venta ? `$${response.data.venta}` : "S/C";
+};
