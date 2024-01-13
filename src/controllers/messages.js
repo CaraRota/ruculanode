@@ -11,6 +11,7 @@ import {
     cryptoPrices,
     acciones,
     granos,
+    generalApi,
 } from "../config/api.js";
 import { GenerateTemplate, formatNumber, fetchDolarData } from "../hooks/ctxReplyTemplate.js";
 import logger from "../config/winstonLogger.js";
@@ -41,26 +42,31 @@ export const getAdaPrice = async (ctx) => {
 export const generalData = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the general data`);
     try {
-        const dolarOficial = await fetchDolarData(oficial);
-        const dolarBlue = await fetchDolarData(blue);
-        const dolarTurista = await fetchDolarData(turista);
-        const dolarMayorista = await fetchDolarData(mayorista);
+        const getGeneralData = await axios.get(generalApi);
+        const general = getGeneralData.data;
+
         const dolarFuturo = await fetchDolarData(futuro);
         const dolarCCL = await fetchDolarData(ccl);
         const dolarMep = await fetchDolarData(mep);
         const dolarCripto = await fetchDolarData(cripto);
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; // Ignore certificate errors just for this request
+        const precioGranos = await axios.get(granos);
+        const soja = precioGranos.data.pizarra[0].soja.rosario;
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = "1"; // Ignore certificate errors just for this request
 
         ctx.reply(
             `*💼 COTIZACIONES GENERALES*
 
-*🏦 Dolar Oficial:* ${dolarOficial}
-*💸 Dolar Blue:* ${dolarBlue}
-*🏖 Dolar Turista:* ${dolarTurista}
-*🏭 Dolar Mayorista:* ${dolarMayorista}
+*🏦 Dolar Oficial:* ${general[0].venta ? `$${general[0].venta}` : "S/C"}
+*🥬 Dolar Blue:* ${general[1].venta ? `$${general[1].venta}` : "S/C"}
+*🏖 Dolar Turista:* ${general[2].venta ? `${general[2].venta}` : "S/C"}
+*🏭 Dolar Importador:* ${general[4].venta ? `$${general[4].venta}` : "S/C"}
 *🔮 Dolar Futuro:* ${dolarFuturo}
 *🌎 Dolar CCL:* ${dolarCCL}
 *💵 Dolar MEP:* ${dolarMep}
 *🪙 Dolar Cripto:* ${dolarCripto}
+*🌱 Soja:* ${soja ? `$${soja}` : "S/C"}
+*🎢 Riesgo Pais:* ${general[7].val1 ? `$${general[7].val1}` : "S/C"}
 `,
             { parse_mode: "Markdown", reply_to_message_id: ctx.message.message_id }
         );
@@ -178,6 +184,7 @@ export const getGranos = async (ctx) => {
     try {
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; // Ignore certificate errors just for this request
         const response = await axios.get(granos);
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = "1"; // Ignore certificate errors just for this request
         const grano = response.data.pizarra[0];
 
         const { fecha, soja, sorgo, girasol, trigo, maiz } = grano;
