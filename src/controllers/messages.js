@@ -12,7 +12,7 @@ import {
     acciones,
     granos,
 } from "../config/api.js";
-import { GenerateTemplate, formatNumber, fetchDolarData } from "./ctxReplyTemplate.js";
+import { GenerateTemplate, formatNumber, fetchDolarData } from "../hooks/ctxReplyTemplate.js";
 import logger from "../config/winstonLogger.js";
 
 //THIS IS AN EASTER EGG
@@ -64,6 +64,61 @@ export const generalData = async (ctx) => {
 `,
             { parse_mode: "Markdown", reply_to_message_id: ctx.message.message_id }
         );
+    } catch (error) {
+        logger.error(error);
+        ctx.reply(`Error: ${error}`);
+    }
+};
+
+export const convertCurrency = async (ctx) => {
+    logger.info(`${ctx.from.username} asked to convert currency`);
+    try {
+        console.log("ctx.message.text", ctx.message.text);
+        const deconstruct = ctx.message.text.split(" ");
+        const currency = deconstruct[0];
+
+        const amount = deconstruct[1];
+        const parsedAmount = parseFloat(amount);
+
+        if (!(parsedAmount > 0)) {
+            ctx.reply(
+                "Debes ingresar un número entero positivo para que pueda calcular tu conversión"
+            );
+        }
+
+        const dolarOficial = await fetchDolarData(oficial, true);
+        const dolarBlue = await fetchDolarData(blue, true);
+        const dolarTurista = await fetchDolarData(turista, true);
+        const dolarCCL = await fetchDolarData(ccl, true);
+        const dolarMep = await fetchDolarData(mep, true);
+        const dolarCripto = await fetchDolarData(cripto, true);
+
+        if (currency === "/usd") {
+            ctx.reply(
+                `*🇺🇸 COMPRAR ${parsedAmount} USD*
+$${(dolarOficial * parsedAmount).toFixed(2)} ARS (Oficial)
+$${(dolarBlue * parsedAmount).toFixed(2)} ARS (Blue)
+$${(dolarTurista * parsedAmount).toFixed(2)} ARS (Turista)
+$${(dolarCCL * parsedAmount).toFixed(2)} ARS (CCL)
+$${(dolarMep * parsedAmount).toFixed(2)} ARS (MEP)
+$${(dolarCripto * parsedAmount).toFixed(2)} ARS (Cripto)
+            `,
+                { parse_mode: "Markdown", reply_to_message_id: ctx.message.message_id }
+            );
+        }
+        if (currency === "/ars") {
+            ctx.reply(
+                `*🇦🇷  COMPRAR USD CON ${parsedAmount} ARS*
+$${(parsedAmount / dolarOficial).toFixed(2)} USD (Oficial)
+$${(parsedAmount / dolarBlue).toFixed(2)} USD (Blue)
+$${(parsedAmount / dolarTurista).toFixed(2)} USD (Turista)
+$${(parsedAmount / dolarCCL).toFixed(2)} USD (CCL)
+$${(parsedAmount / dolarMep).toFixed(2)} USD (MEP)
+$${(parsedAmount / dolarCripto).toFixed(2)} USD (Cripto)
+            `,
+                { parse_mode: "Markdown", reply_to_message_id: ctx.message.message_id }
+            );
+        }
     } catch (error) {
         logger.error(error);
         ctx.reply(`Error: ${error}`);

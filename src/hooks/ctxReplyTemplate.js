@@ -30,7 +30,11 @@ export const formatNumber = (number) => {
 };
 
 //DATA FETCHER FOR GENERAL COMMAND
-export const fetchDolarData = async (url) => {
+export const fetchDolarData = async (url, tx) => {
     const response = await axios.get(url);
+    if (tx) {
+        const parsedData = parseFloat(response.data.venta.replace(",", "."));
+        return response.data.venta ? parsedData : "S/C";
+    }
     return response.data.venta ? `$${response.data.venta}` : "S/C";
 };
