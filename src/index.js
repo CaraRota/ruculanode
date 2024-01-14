@@ -17,6 +17,7 @@ import {
     getGranos,
     generalData,
     convertCurrency,
+    getCryptoPrices,
 } from "./controllers/messages.js";
 import logger from "./config/winstonLogger.js";
 
@@ -47,6 +48,7 @@ bot.command("futuro", getDolarFuturoPrice);
 bot.command("acciones", getAcciones);
 bot.command("granos", getGranos);
 bot.command(["usd", "ars"], convertCurrency);
+bot.command("crypto", getCryptoPrices);
 
 // EASTER EGGS
 bot.command("ada", getAdaPrice);

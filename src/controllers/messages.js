@@ -15,6 +15,7 @@ import {
 } from "../config/api.js";
 import { generateTemplate, formatNumber, fetchDolarData } from "../hooks/ctxReplyTemplate.js";
 import logger from "../config/winstonLogger.js";
+import e from "express";
 
 //THIS IS AN EASTER EGG
 export const getAdaPrice = async (ctx) => {
@@ -225,6 +226,43 @@ export const getGranos = async (ctx) => {
                 reply_to_message_id: ctx.message.message_id,
             }
         );
+    } catch (error) {
+        ctx.reply(`Error: ${error}`);
+        logger.error(error);
+    }
+};
+
+export const getCryptoPrices = async (ctx) => {
+    logger.info(`${ctx.from.username} asked for the crypto prices`);
+    try {
+        const response = await axios.get(cryptoPrices);
+
+        //First we want to filter stablecoins
+        const filteredStablecoins = response.data.filter(
+            (crypto) =>
+                crypto.symbol !== "usdt" && crypto.symbol !== "dai" && crypto.symbol !== "usdc"
+        );
+
+        //And now we just grab the first 10 results
+        const slicedResponse = filteredStablecoins.slice(0, 10);
+
+        let message = "*🤖 TOP 10 CRIPTOS:*\n\n";
+        slicedResponse.forEach((crypto) => {
+            let trafficLight = "";
+            if (crypto.price_change_percentage_24h > 0) {
+                trafficLight += `🟢 `;
+            } else if (crypto.price_change_percentage_24h === 0) {
+                trafficLight += `🟡 `;
+            } else {
+                trafficLight += `🔴 `;
+            }
+            message += `${trafficLight} *${
+                crypto.name
+            }* (${crypto.symbol.toUpperCase()}): $${crypto.current_price.toFixed(
+                2
+            )} | ${crypto.price_change_percentage_24h.toFixed(2)}% \n`;
+        });
+        ctx.reply(message, { parse_mode: "Markdown" });
     } catch (error) {
         ctx.reply(`Error: ${error}`);
         logger.error(error);
