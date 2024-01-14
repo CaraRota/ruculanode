@@ -248,9 +248,9 @@ export const getDolarTuristaPrice = async (ctx) => {
     generateTemplate(ctx, turista, "🏖 PRECIO DOLAR TURISTA");
 };
 
-export const getDolarMayoristaPrice = async (ctx) => {
+export const getDolarImportadorPrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the mayorista dollar price`);
-    generateTemplate(ctx, mayorista, "🏭 PRECIO DOLAR MAYORISTA");
+    generateTemplate(ctx, mayorista, "🏭 PRECIO DOLAR IMPORTADOR");
 };
 
 export const getDolarFuturoPrice = async (ctx) => {

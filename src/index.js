@@ -8,7 +8,7 @@ import {
     getDolarOficialPrice,
     getDolarBluePrice,
     getDolarTuristaPrice,
-    getDolarMayoristaPrice,
+    getDolarImportadorPrice,
     getDolarFuturoPrice,
     getDolarCclPrice,
     getDolarMepPrice,
@@ -20,33 +20,36 @@ import {
 } from "./controllers/messages.js";
 import logger from "./config/winstonLogger.js";
 
+const port = process.env.PORT || 3000;
+
 const expressApp = express();
 expressApp.use(express.static("static"));
 expressApp.use(express.json());
-
-const bot = new Telegraf(process.env.BOT_TOKEN);
-
-expressApp.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "src/index.html"));
+expressApp.use(express.urlencoded({ extended: true }));
+expressApp.listen(port, () => {
+    logger.info(`Server running on port ${port}`);
 });
 
+const bot = new Telegraf(process.env.BOT_TOKEN);
 logger.info("Starting the bot...");
 
 bot.start(getStarted);
 
 bot.command("general", generalData);
 bot.command("oficial", getDolarOficialPrice);
-bot.command("ada", getAdaPrice);
-bot.command("andate", removeBot);
 bot.command("informal", getDolarBluePrice);
 bot.command("turista", getDolarTuristaPrice);
-bot.command("mayorista", getDolarMayoristaPrice);
-bot.command("futuro", getDolarFuturoPrice);
-bot.command("ccl", getDolarCclPrice);
 bot.command("mep", getDolarMepPrice);
+bot.command("ccl", getDolarCclPrice);
 bot.command("cripto", getDolarCriptoPrice);
+bot.command("importador", getDolarImportadorPrice);
+bot.command("futuro", getDolarFuturoPrice);
 bot.command("acciones", getAcciones);
 bot.command("granos", getGranos);
 bot.command(["usd", "ars"], convertCurrency);
+
+// EASTER EGGS
+bot.command("ada", getAdaPrice);
+bot.command("andate", removeBot);
 
 bot.launch();
