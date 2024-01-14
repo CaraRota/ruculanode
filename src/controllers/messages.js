@@ -182,7 +182,7 @@ export const getAcciones = async (ctx) => {
     try {
         const response = await axios.get(acciones);
         const cotizacion = response.data.values;
-        let message = "";
+        let message = "*🗺 TOP 25 ACCIONES:*\n\n";
         cotizacion.forEach((accion) => {
             const parsePrice = accion[1].slice(0, -3).replace(",", "");
             const parsedVariation = accion[2].replace("%", "");
@@ -194,7 +194,7 @@ export const getAcciones = async (ctx) => {
         if (message === "") {
             message = "No hay cotizaciones disponibles";
         }
-        ctx.reply(message);
+        ctx.reply(message, { parse_mode: "Markdown" });
     } catch (error) {
         ctx.reply(`Error: ${error}`);
         logger.error(error);

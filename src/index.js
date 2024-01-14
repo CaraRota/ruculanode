@@ -48,7 +48,7 @@ bot.command("futuro", getDolarFuturoPrice);
 bot.command("acciones", getAcciones);
 bot.command("granos", getGranos);
 bot.command(["usd", "ars"], convertCurrency);
-bot.command("crypto", getCryptoPrices);
+bot.command("cryptos", getCryptoPrices);
 
 // EASTER EGGS
 bot.command("ada", getAdaPrice);
