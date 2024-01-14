@@ -13,7 +13,7 @@ import {
     granos,
     generalApi,
 } from "../config/api.js";
-import { GenerateTemplate, formatNumber, fetchDolarData } from "../hooks/ctxReplyTemplate.js";
+import { generateTemplate, formatNumber, fetchDolarData } from "../hooks/ctxReplyTemplate.js";
 import logger from "../config/winstonLogger.js";
 
 //THIS IS AN EASTER EGG
@@ -37,6 +37,27 @@ export const getAdaPrice = async (ctx) => {
         ctx.reply(`Error: ${error}`);
         logger.error(error);
     }
+};
+
+export const getStarted = (ctx) => {
+    logger.info(`${ctx.from.username} started the bot`);
+    ctx.reply(
+        `👋🏻 Hola ${ctx.from.first_name}!
+
+Soy un bot que te informa sobre el precio del dolar y otras cosas mas.
+
+Fui creado por Sebastian Camia; Fullstack Web Developer.
+
+Si queres saber mas sobre el, podes visitar su LinkedIn:
+    https://www.linkedin.com/in/sebastian-emanuel-camia-trefs/
+
+Tambien puedes visitar mi version web:
+https://ruculaweb.netlify.app/
+`
+    ),
+        {
+            parse_mode: "Markdown",
+        };
 };
 
 export const generalData = async (ctx) => {
@@ -214,40 +235,40 @@ export const getGranos = async (ctx) => {
 
 export const getDolarOficialPrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the official dollar price`);
-    GenerateTemplate(ctx, oficial, "🏦 PRECIO DOLAR OFICIAL");
+    generateTemplate(ctx, oficial, "🏦 PRECIO DOLAR OFICIAL");
 };
 
 export const getDolarBluePrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the blue dollar price`);
-    GenerateTemplate(ctx, blue, "💸 PRECIO DOLAR BLUE");
+    generateTemplate(ctx, blue, "💸 PRECIO DOLAR BLUE");
 };
 
 export const getDolarTuristaPrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the turista dollar price`);
-    GenerateTemplate(ctx, turista, "🏖 PRECIO DOLAR TURISTA");
+    generateTemplate(ctx, turista, "🏖 PRECIO DOLAR TURISTA");
 };
 
 export const getDolarMayoristaPrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the mayorista dollar price`);
-    GenerateTemplate(ctx, mayorista, "🏭 PRECIO DOLAR MAYORISTA");
+    generateTemplate(ctx, mayorista, "🏭 PRECIO DOLAR MAYORISTA");
 };
 
 export const getDolarFuturoPrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the futuro dollar price`);
-    GenerateTemplate(ctx, futuro, "🔮 PRECIO DOLAR FUTURO");
+    generateTemplate(ctx, futuro, "🔮 PRECIO DOLAR FUTURO");
 };
 
 export const getDolarCclPrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the ccl dollar price`);
-    GenerateTemplate(ctx, ccl, "🌎 PRECIO DOLAR CCL");
+    generateTemplate(ctx, ccl, "🌎 PRECIO DOLAR CCL");
 };
 
 export const getDolarMepPrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the mep dollar price`);
-    GenerateTemplate(ctx, mep, "💵 PRECIO DOLAR MEP");
+    generateTemplate(ctx, mep, "💵 PRECIO DOLAR MEP");
 };
 
 export const getDolarCriptoPrice = async (ctx) => {
     logger.info(`${ctx.from.username} asked for the cripto dollar price`);
-    GenerateTemplate(ctx, cripto, "🪙 PRECIO DOLAR CRIPTO");
+    generateTemplate(ctx, cripto, "🪙 PRECIO DOLAR CRIPTO");
 };

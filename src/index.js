@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { Telegraf } from "telegraf";
 import {
+    getStarted,
     getAdaPrice,
     removeBot,
     getDolarOficialPrice,
@@ -29,7 +30,9 @@ expressApp.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "src/index.html"));
 });
 
-logger.info("Starting bot");
+logger.info("Starting the bot...");
+
+bot.start(getStarted);
 
 bot.command("general", generalData);
 bot.command("oficial", getDolarOficialPrice);

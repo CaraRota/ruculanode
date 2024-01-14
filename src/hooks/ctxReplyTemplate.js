@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const GenerateTemplate = async (ctx, api, title) => {
+export const generateTemplate = async (ctx, api, title) => {
     const response = await axios.get(api);
     const precio = response.data;
 
