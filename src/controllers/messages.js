@@ -15,7 +15,6 @@ import {
 } from "../config/api.js";
 import { generateTemplate, formatNumber, fetchDolarData } from "../hooks/ctxReplyTemplate.js";
 import logger from "../config/winstonLogger.js";
-import e from "express";
 
 //THIS IS AN EASTER EGG
 export const getAdaPrice = async (ctx) => {
@@ -88,7 +87,7 @@ export const generalData = async (ctx) => {
 *💵 Dolar MEP:* ${dolarMep}
 *🪙 Dolar Cripto:* ${dolarCripto}
 *🌱 Soja:* ${soja ? `$${soja}` : "S/C"}
-*🎢 Riesgo Pais:* ${general[7].val1 ? `$${general[7].val1}` : "S/C"}
+*🎢 Riesgo Pais:* ${general[7].val1 ? `${general[7].val1}` : "S/C"}
 `,
             { parse_mode: "Markdown", reply_to_message_id: ctx.message.message_id }
         );
